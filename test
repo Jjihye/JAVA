@@ -3,5 +3,6 @@ public class Test{
     System.out.println("Helloworld");
     //first file!!
     System.out.println("add text");
+    System.out.println("add text2");
   }
 }
