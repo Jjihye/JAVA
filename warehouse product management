@@ -1,0 +1,117 @@
+
+//warehouse product management
+
+package practice;
+
+import java.util.Scanner;
+import java.util.Vector;
+
+/*
+	클래스	| 기본클래스 설계	| 각 물품별 클래스 설계
+	설계		| 확장성 고려		  | 신제품 추가 시 확장성
+	=========================================
+		      | 메뉴출력	
+			    | 물품입고	
+	기능		| 물품출고	
+	동작		| 분류별 출력	
+			    | 제품별 출력	
+			    | 총 자산 출력	
+*/
+
+class Goods{
+	
+	//변수
+	private String gCategori;		// 제품 분류
+	private String gCode;			// 제품 코드(제품명)
+	
+	//생성자
+	public Goods(){
+		//카테고리 생성
+		Vector categoriA	= new Vector();
+		Vector categoriB	= new Vector();
+		Vector categoriC	= new Vector();
+	}
+	
+	public Goods(String argCategori, String argCode){
+		setCode(argCode);
+		setCategori(argCategori);
+	}
+	
+	//메소드
+	public void setCategori(String argCategori){
+		gCategori = argCategori;
+	}
+	public String getCategori(){
+		return gCategori;
+	}
+	public void setCode(String argCode){
+		gCode = argCode;
+	}
+	public String getCode(){
+		return gCode;
+	}
+}
+
+
+
+
+//메뉴 출력
+class Menu{
+	
+	int selectNum;
+	public Menu(){
+		
+		Scanner scan		= new Scanner(System.in);
+		
+		System.out.println("1.물품 입고 2.물품 출고 3.재고현황");
+		selectNum = scan.nextInt();
+		
+		switch(selectNum){
+		case 1:
+			//input
+		case 2:
+			//Output
+		case 3:
+			//CheckStock
+			default :
+				//
+		}
+	}
+	//물품 입고
+	class Input extends Goods{
+		
+		//생성자 : 실행부분
+		public Input(String argCategori, String argCode) {
+			super(argCategori, argCode);
+			// TODO Auto-generated constructor stub
+		}
+		
+		//메소드 : 기능부분
+		
+		
+	}
+
+	//물품 출고
+	class Output{
+		
+	}
+
+	//재고 현황
+	class CheckStock{
+		//분류별
+		//제품별
+		//총 자산
+	}
+}
+
+
+public class MainClass {
+	public static void main(String args[]){
+		
+		Menu M = new Menu();
+		
+		
+		
+		
+	}
+}
