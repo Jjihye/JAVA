@@ -1,0 +1,250 @@
+package practice;
+
+import java.util.Scanner;
+import java.util.Vector;
+
+/*
+	클래스	| 기본클래스 설계	| 각 물품별 클래스 설계
+	설계		| 확장성 고려		| 신제품 추가 시 확장성
+	=========================================
+			| 메뉴출력	
+			| 물품입고	
+	기능		| 물품출고	
+	동작		| 분류별 출력	
+			| 제품별 출력	
+			| 총 자산 출력	
+*/
+
+
+//codeNumber
+class ID {
+	
+	static int Acode = 0;		//카테고리A의 코드
+	static int Bcode = 0;		//카테고리B의 코드
+	static int Ccode = 0;		//카테고리C의 코드
+	
+	//수량 증가시켜주는 메소드
+	static int AcodeInc() { return ++Acode; }
+	static int BcodeInc() { return ++Bcode; }
+	static int CcodeInc() {	return ++Ccode; }
+	
+}
+
+//상품
+class Goods{
+	
+	private String	gName;		//제품명
+	private String	gCode;		//제품코드
+	private int		gQuantity;	//제품수량
+	
+	
+	//생성자
+	public Goods(String argName, String argCode, int argQuantity){
+		setName(argName);
+		setCode(argCode);
+		setQuantity(argQuantity);
+	}
+	public void setName(String argName) {
+		gName = argName;
+	}
+	public void setCode(String argCode) {
+		gCode = argCode;
+	}
+	public void setQuantity(int argQuantity) {
+		gQuantity = argQuantity;
+	}
+	
+	String getName() { return gName; }	
+	String getCode() { return gCode; }
+	int getQuantity() { return gQuantity; }
+	//증가
+	void Increase(int argQuantity) { gQuantity += argQuantity; }
+	//감소
+	void Decrease(int argQuantity) { gQuantity -= argQuantity; }
+	
+}
+
+class Menu{
+	Scanner scan		= new Scanner(System.in);
+	Vector	CategoryA	= new Vector();
+	Vector	CategoryB	= new Vector();
+	Vector	CategoryC	= new Vector();
+	Vector	List[]		= {CategoryA, CategoryB, CategoryC};
+	
+	String	name;		//입력한 상품명
+	int		quantity;	//입력한 상품수량
+	boolean check;		//구제품인지 신제품인지 판별할 값
+	Goods	pwd;		//경로(캐스터연산한 부분)
+	String	code;		//code자동할당 +ID클래스 참조
+	
+//=>물품 입고
+	void Input(int argCategoryNum){
+		
+		System.out.print("Insert Name, Quantity for Goods!\n: ");
+		name = scan.next();
+		quantity = scan.nextInt();
+		check = false;
+		pwd = null;
+		code = null;
+		
+		//구제품인지 신제품인지 판별해서 추가or등록하기
+		for(int iCount = 0; iCount < List[argCategoryNum-1].size(); iCount++){
+			//argCheckNum-1 카테고리의 객체찾기
+			pwd = (Goods)List[argCategoryNum-1].get(iCount);
+			if(pwd.getName().equals(name)){
+				check = true; //true : 구제품, 수량추가
+				break;
+			}
+		}
+		//카테고리별 물품입고
+		if(check){
+			System.out.println(check);
+			//수량증가
+			pwd.Increase(quantity);
+		}
+		else{ //false : 신제품, 등록
+			
+			if(argCategoryNum>0 && argCategoryNum<4){
+				
+				switch(argCategoryNum) {
+					case 1: code = "A" + ID.AcodeInc(); break;
+					case 2: code = "B" + ID.BcodeInc(); break;
+					case 3: code = "C" + ID.CcodeInc(); break;
+				}				
+				List[argCategoryNum-1].add(new Goods(name, code, quantity));
+				//등록완료
+			}else { System.out.println("Ready.."); }			
+		}
+	}
+	
+//=>물품 출고
+void Output(int argCategoryNum, String argname, int argQuantity){
+		//카테고리선택 및 제품명, 제거할 수량 입력
+		//+제품등록된 사항 제거 항목 고려해보기
+		//제품명 매칭 후 수량 감소
+		for(int iCount = 0; iCount < List[argCategoryNum-1].size(); iCount++){
+			//argCheckNum-1 카테고리의 객체찾기
+			pwd = (Goods)List[argCategoryNum-1].get(iCount);
+			if(pwd.getName().equals(argname)){
+				pwd.Decrease(argQuantity);
+				break;
+			}
+		}
+		
+	}
+
+//=>재고 현황
+	void CheckStock(int argPrtNum){		
+		switch(argPrtNum){
+		case 1:
+			//System.out.println("=============<<카테고리>>=============");
+			System.out.println("[1]categoryA [2]categoryB [3]categoryC");
+			//분류별
+			CategoryPrt(scan.nextInt());
+			break;
+		case 2:
+			//제품별
+			GoodsPrt();
+			break;
+		case 3:
+			//총 자산
+			System.out.println(TotalQuantityPrt());
+			break;	
+		}
+	}
+	
+	void CategoryPrt(int argCategoryNum){
+//1. 분류별 출력
+		switch(argCategoryNum){
+		case 1: //Category[0] : categoryA
+			System.out.println("categoryA[" + List[argCategoryNum-1].size() + "]");
+			ListPrt(argCategoryNum-1);
+			break;
+		case 2: //Category[1] : categoryB
+			System.out.println("categoryB[" + List[argCategoryNum-1].size() + "]");
+			ListPrt(argCategoryNum-1);
+			break;
+		case 3: //Category[2] : categoryC
+			System.out.println("categoryC[" + List[argCategoryNum-1].size() + "]");
+			ListPrt(argCategoryNum-1);
+			break;
+			default:
+				System.out.println("not found this Category");
+				break;
+		}
+	}	//CategoryPrt의 부속, 제품리스트
+		void ListPrt(int argCategoryNum){
+			for(int oCount = 0; oCount<List[argCategoryNum].size() ;oCount++){
+				System.out.print("Name: " + ((Goods)(List[argCategoryNum].get(oCount))).getName() + "\t");
+				System.out.print("Code: " + ((Goods)(List[argCategoryNum].get(oCount))).getCode() + "\t");
+				System.out.println("Quantity: " + ((Goods)(List[argCategoryNum].get(oCount))).getQuantity());
+			}
+		}
+
+	void GoodsPrt(){
+//2. 제품별 출력
+		System.out.println(" NAME\t\t CODE\t\t QUANTITY");
+		System.out.println("---------------------------------------------");
+		
+		for(int N = 0; N < List.length; N++){
+			for(int iCount = 0; iCount < List[N].size(); iCount++){
+				
+				pwd = (Goods)List[N].get(iCount);
+				
+				System.out.print("Name: " + pwd.getName() + "\t");
+				System.out.print("Code: " + pwd.getCode() + "\t");
+				System.out.println("Quantity: " + pwd.getQuantity());
+			}
+		}
+	}
+	int TotalQuantityPrt(){
+//3. 총 자산 출력
+		int sum=0;
+		for(int N = 0; N < List.length; N++)
+			sum+=List[N].size();
+		return sum;
+	}
+}
+
+//===============================MainClass====================================
+public class MainClass {
+	public static void main(String args[]){
+		
+		int		selectNum;
+		boolean	flag		= true;
+		Scanner scan		= new Scanner(System.in);
+		Menu	mn			= new Menu();
+		
+		while(flag){
+		//=>메뉴 출력
+			System.out.println("<MENU>\n [1]물품 입고 [2]물품 출고 [3]재고현황");
+			selectNum = scan.nextInt();
+		
+			switch(selectNum){
+			case 1:
+				//Input
+				System.out.println("=============<<카테고리>>=============");
+				System.out.println("[1]categoryA [2]categoryB [3]categoryC");
+				mn.Input(scan.nextInt());
+				break;
+			case 2:
+				//Output
+				System.out.println("=============<<카테고리>>=============");
+				System.out.println("[1]categoryA [2]categoryB [3]categoryC");
+				System.out.println("Insert Category Number, Name, Quantity for removing!\n: ");
+				mn.Output(scan.nextInt(), scan.next(), scan.nextInt());
+				break;
+			case 3:
+				//CheckStock
+				System.out.println("[1]분류별 출력 [2]제품별 출력 [3]총 자산출력");
+				mn.CheckStock(scan.nextInt());
+				break;
+			default :
+				flag = false;
+				System.out.println("Exited");
+				break;
+					
+			}
+		}
+	}
+}
