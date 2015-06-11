@@ -1,6 +1,3 @@
-
-//warehouse product management
-
 package practice;
 
 import java.util.Scanner;
@@ -8,110 +5,149 @@ import java.util.Vector;
 
 /*
 	클래스	| 기본클래스 설계	| 각 물품별 클래스 설계
-	설계		| 확장성 고려		  | 신제품 추가 시 확장성
+	설계	| 확장성 고려		| 신제품 추가 시 확장성
 	=========================================
-		      | 메뉴출력	
-			    | 물품입고	
-	기능		| 물품출고	
-	동작		| 분류별 출력	
-			    | 제품별 출력	
-			    | 총 자산 출력	
+		| 메뉴출력	
+		| 물품입고	
+	기능	| 물품출고	
+	동작	| 분류별 출력	
+		| 제품별 출력	
+		| 총 자산 출력	
 */
 
+//상품
 class Goods{
+	private String	gName;		//제품명
+	private String	gCode;		//제품코드
+	private int	gQuantity;	//제품수량
 	
-	//변수
-	private String gCategori;		// 제품 분류
-	private String gCode;			// 제품 코드(제품명)
-	
-	//생성자
 	public Goods(){
-		//카테고리 생성
-		Vector categoriA	= new Vector();
-		Vector categoriB	= new Vector();
-		Vector categoriC	= new Vector();
+		
 	}
 	
-	public Goods(String argCategori, String argCode){
+	public Goods(String argName, String argCode, int argQuantity){
+		
+		setName(argName);
 		setCode(argCode);
-		setCategori(argCategori);
+		setQuantity(argQuantity);
+		
+	}
+	private void setName(String argName) {
+		gName = argName;
+		
+	}
+	private void setCode(String argCode) {
+		gCode = argCode;
+		
+	}
+	private void setQuantity(int argQuantity) {
+		gQuantity = argQuantity;
+		
 	}
 	
-	//메소드
-	public void setCategori(String argCategori){
-		gCategori = argCategori;
+	String getName() {
+		return gName;	
 	}
-	public String getCategori(){
-		return gCategori;
+	
+	String getCode() {		
+		return gCode;		
 	}
-	public void setCode(String argCode){
-		gCode = argCode;
+
+	int getQuantity() {	
+		return gQuantity;	
 	}
-	public String getCode(){
-		return gCode;
-	}
+	
+	//Vector T = new Vector();
+	//T.add(new Goods);
 }
 
-
-
-
-//메뉴 출력
 class Menu{
 	
-	int selectNum;
-	public Menu(){
+	Scanner scan	= new Scanner(System.in);
+	Vector CategoryA = new Vector();
+	Vector CategoryB = new Vector();
+	Vector CategoryC = new Vector();
+	
+	void Menu(){
 		
-		Scanner scan		= new Scanner(System.in);
-		
-		System.out.println("1.물품 입고 2.물품 출고 3.재고현황");
-		selectNum = scan.nextInt();
-		
-		switch(selectNum){
-		case 1:
-			//input
-		case 2:
-			//Output
-		case 3:
-			//CheckStock
-			default :
-				//
-		}
 	}
 	//물품 입고
-	class Input extends Goods{
-		
-		//생성자 : 실행부분
-		public Input(String argCategori, String argCode) {
-			super(argCategori, argCode);
-			// TODO Auto-generated constructor stub
+	void Input(int argCheckNum){
+		System.out.print("Insert name, code, quantity for Goods\n :");
+		switch(argCheckNum){
+		case 1:
+			CategoryA.add(new Goods(scan.nextLine(),scan.nextLine(),scan.nextInt()));
+			break;
+		case 2:
+			CategoryB.add(new Goods(scan.nextLine(),scan.nextLine(),scan.nextInt()));
+			break;
+		case 3:
+			CategoryC.add(new Goods(scan.nextLine(),scan.nextLine(),scan.nextInt()));
+			break;
 		}
-		
-		//메소드 : 기능부분
-		
-		
 	}
-
+	
 	//물품 출고
-	class Output{
+	void Output(){
 		
 	}
 
 	//재고 현황
-	class CheckStock{
+	void CheckStock(){
 		//분류별
+		System.out.println("");
 		//제품별
+		System.out.println("");
 		//총 자산
+		System.out.println("");
 	}
+	void CategoryPrt(){
+		//분류별 출력
+	}
+	void GoodsPrt(){
+		//제품별 출력
+		System.out.println("Name : " + ((Goods)(CategoryA.get(0))).getName());
+		System.out.println("Code : " + ((Goods)(CategoryA.get(0))).getCode());
+		System.out.println("Quantity : " + ((Goods)(CategoryA.get(0))).getQuantity());
+	}
+	void TotalQuantityPrt(){
+		//총 자산 출력
+	}
+	
+
 }
-
-
 public class MainClass {
 	public static void main(String args[]){
 		
-		Menu M = new Menu();
+		int		selectNum;
+		boolean	flag		= true;
+		Scanner scan		= new Scanner(System.in);
+		Menu	mn			= new Menu();
 		
+		while(flag){
+			//메뉴 출력
+			System.out.println("1.물품 입고 2.물품 출고 3.재고현황");
+			selectNum = scan.nextInt();
 		
-		
-		
+			switch(selectNum){
+			case 1:
+				//Input
+				System.out.println("======<<카테고리>>=====");
+				System.out.println("1.categoryA 2.categoryB 3.categoryC");
+				mn.Input(scan.nextInt());
+				break;
+			case 2:
+				//Output
+				break;
+			case 3:
+				//CheckStock
+				mn.GoodsPrt();
+				break;
+				default :
+					flag = false;
+					break;
+					
+			}
+		}
 	}
 }
