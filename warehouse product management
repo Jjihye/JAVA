@@ -62,7 +62,7 @@ class Goods{
 }
 
 class Menu{
-	
+		
 	Scanner scan		= new Scanner(System.in);
 	Vector CategoryA	= new Vector();
 	Vector CategoryB	= new Vector();
@@ -106,13 +106,13 @@ class Menu{
 			break;
 		case 3:
 			//총 자산
-			TotalQuantityPrt();
+			System.out.println(TotalQuantityPrt());
 			break;	
 		}
 	}
 	
 	void CategoryPrt(int argCategoryNum){
-		//분류별 출력
+//분류별 출력
 		switch(argCategoryNum){
 		case 1:
 			//Category[0] : categoryA
@@ -132,11 +132,8 @@ class Menu{
 			default:
 				System.out.println("찾을 수 없는 카테고리입니다.");
 				break;
-		
 		}
-		
-	}
-	//CategoryPrt의 부속품 제품리스트
+	}//CategoryPrt의 부속품 제품리스트
 	void ListPrt(int argCategoryNum){
 		for(int oCount = 0; oCount<List[argCategoryNum].size() ;oCount++){
 			System.out.print("Name: " + ((Goods)(List[argCategoryNum].get(oCount))).getName() + "\t");
@@ -144,9 +141,9 @@ class Menu{
 			System.out.println("Quantity: " + ((Goods)(List[argCategoryNum].get(oCount))).getQuantity());
 		}
 	}
-	
+
 	void GoodsPrt(){
-		//제품별 출력
+//제품별 출력
 		System.out.println(" NAME\t\t CODE\t\t QUANTITY");
 		System.out.println("---------------------------------------------");
 		
@@ -161,13 +158,15 @@ class Menu{
 			}
 		}
 	}
-	void TotalQuantityPrt(){
-		//총 자산 출력
-		
+	int TotalQuantityPrt(){
+//총 자산 출력
+		int sum=0;
+		for(int N = 0; N < List.length; N++)
+			sum+=List[N].size();
+		return sum;
 	}
-	
-
 }
+	
 public class MainClass {
 	public static void main(String args[]){
 		
