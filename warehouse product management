@@ -17,77 +17,89 @@ import java.util.Vector;
 
 //상품
 class Goods{
+	
 	private String	gName;		//제품명
 	private String	gCode;		//제품코드
 	private int		gQuantity;	//제품수량
 	
-	public Goods(){
-		
-	}
 	
+	//생성자
 	public Goods(String argName, String argCode, int argQuantity){
-		
 		setName(argName);
 		setCode(argCode);
 		setQuantity(argQuantity);
-		
 	}
 	private void setName(String argName) {
 		gName = argName;
-		
 	}
 	private void setCode(String argCode) {
 		gCode = argCode;
-		
 	}
 	private void setQuantity(int argQuantity) {
 		gQuantity = argQuantity;
-		
 	}
 	
-	String getName() {
-		return gName;	
-	}
+	String getName() { return gName; }	
+	String getCode() { return gCode; }
+	int getQuantity() { return gQuantity; }
 	
-	String getCode() {		
-		return gCode;		
-	}
-
-	int getQuantity() {	
-		return gQuantity;	
-	}
+	void Increase(int argQuantity) { gQuantity += argQuantity; }
+	void Decrease(int argQuantity) { gQuantity -= argQuantity; }
 	
-	//Vector T = new Vector();
-	//T.add(new Goods);
 }
 
 class Menu{
-		
 	Scanner scan		= new Scanner(System.in);
 	Vector CategoryA	= new Vector();
 	Vector CategoryB	= new Vector();
 	Vector CategoryC	= new Vector();
 	Vector List[]		= {CategoryA, CategoryB, CategoryC};
-	
-	void Menu(){
 		
-	}
 	//물품 입고
 	void Input(int argCheckNum){
-		System.out.print("Insert Name, Code, Quantity for Goods\n: ");
-		String name = scan.next();
-		String code = scan.next();
-		int quantity = scan.nextInt();
+		
+		System.out.print("Insert Name, Quantity for Goods\n: ");
+		String	name = scan.next();
+		int		quantity = scan.nextInt();
+		boolean check = false;
+		Goods	temp = null;
+		
+		//code자동할당 +ID클래스 참조
+		String code = null;
+		
+		//구제품인지 신제품인지 판별해서 추가or등록하기
+		for(int iCount = 0; iCount < List[argCheckNum-1].size(); iCount++){
+			temp = (Goods)List[argCheckNum-1].get(iCount);
+			if(temp.getName().equals(name)){
+				check = true; //true : 구제품, 수량추가
+				break;
+			}
+		}
+		
 		//카테고리별 물품입고
-		if(argCheckNum>0 && argCheckNum<4)
-			List[argCheckNum-1].add(new Goods(name, code, quantity));
-		else{
-			System.out.println("Ready..");
+		if(check){
+			System.out.println(check);
+			//수량증가
+			temp.Increase(quantity);
+		}
+		else{ //false : 신제품, 등록
+			if(argCheckNum>0 && argCheckNum<4){
+				switch(argCheckNum) {
+					case 1: code = "A" + ID.AcodeInc(); break;
+					case 2: code = "B" + ID.BcodeInc(); break;
+					case 3: code = "C" + ID.CcodeInc(); break;
+				}				
+				List[argCheckNum-1].add(new Goods(name, code, quantity));
+				//등록완료
+			}else
+				System.out.println("Ready..");			
 		}
 	}
 	
 	//물품 출고
 	void Output(){
+		
+		
 		
 	}
 
@@ -133,14 +145,14 @@ class Menu{
 				System.out.println("찾을 수 없는 카테고리입니다.");
 				break;
 		}
-	}//CategoryPrt의 부속품 제품리스트
-	void ListPrt(int argCategoryNum){
-		for(int oCount = 0; oCount<List[argCategoryNum].size() ;oCount++){
-			System.out.print("Name: " + ((Goods)(List[argCategoryNum].get(oCount))).getName() + "\t");
-			System.out.print("Code: " + ((Goods)(List[argCategoryNum].get(oCount))).getCode() + "\t");
-			System.out.println("Quantity: " + ((Goods)(List[argCategoryNum].get(oCount))).getQuantity());
+	}	//CategoryPrt의 부속품 제품리스트
+		void ListPrt(int argCategoryNum){
+			for(int oCount = 0; oCount<List[argCategoryNum].size() ;oCount++){
+				System.out.print("Name: " + ((Goods)(List[argCategoryNum].get(oCount))).getName() + "\t");
+				System.out.print("Code: " + ((Goods)(List[argCategoryNum].get(oCount))).getCode() + "\t");
+				System.out.println("Quantity: " + ((Goods)(List[argCategoryNum].get(oCount))).getQuantity());
+			}
 		}
-	}
 
 	void GoodsPrt(){
 //제품별 출력
@@ -166,7 +178,7 @@ class Menu{
 		return sum;
 	}
 }
-	
+//===============================MainClass====================================
 public class MainClass {
 	public static void main(String args[]){
 		
@@ -177,7 +189,7 @@ public class MainClass {
 		
 		while(flag){
 			//메뉴 출력
-			System.out.println("<MENU>\n 1 물품 입고 2 물품 출고 3 재고현황");
+			System.out.println("<MENU>\n [1]물품 입고 [2]물품 출고 [3]재고현황");
 			selectNum = scan.nextInt();
 		
 			switch(selectNum){
@@ -198,6 +210,7 @@ public class MainClass {
 				break;
 			default :
 				flag = false;
+				System.out.println("종료되었습니다.");
 				break;
 					
 			}
